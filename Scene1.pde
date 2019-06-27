@@ -1,30 +1,39 @@
 //====Scene1===========================================================
 class Scene1 {
-  int num = 8;
-  float colW = width/8;
-  float colH = 20;
+  int num = 20;
+  float colW = width/num;
+  float colH = height/num;
   float[] colY = new float[num];
   float[] colYSpeed = new float[num];
   float[] colColor = new float[num];
   void init() {
     noStroke();
-    fill(baseColor[0],baseColor[1],baseColor[2]);
-    
     for(int i = 0 ; i < num ; i++) {
-      colYSpeed[i] = random(15)+3;
+      colYSpeed[i] = random(10)+7;
+      colY[i] = random(height);
     };
       println("1");
   };
   void run() {
     for(int i = 0; i < num; i++){
-      if(colY[i] < 0 - colH){
-        colYSpeed[i] = random(15)+3;
+      if(colY[i] < 0 - colH -400){
+        colYSpeed[i] = random(10)+7;
         colY[i] = height + colH;
-        colColor[i] = (baseColor[0]+ random(0.3)) % 1;
       }
       colY[i] = colY[i] - colYSpeed[i];
-      fill(colColor[i],baseColor[1],baseColor[2]);
-      rect(colW * i, colY[i],colW,colH);
+
+      pushMatrix();
+        translate(colW * i, colY[i]);
+        fill(20, 60, 100);
+        scale(0.8);
+        translate(20,0);
+        beginShape(QUADS);
+          vertex(0,  random(400));
+          vertex( colW,  random(400));
+          vertex( colW, 0);
+          vertex(0, 0);
+        endShape();
+      popMatrix();
     };
   };
 }
@@ -36,54 +45,95 @@ class Scene2 {
   float[] colY = new float[num];
   void init() {
     noStroke();
-    fill((baseColor[0]+ random(0.15)) % 1,baseColor[1],baseColor[2]);
+    fill(100);
   };
   void run() {
-    fill((baseColor[0]+ random(0.15)) % 1,baseColor[1],baseColor[2]);
-     if(colY[0] < 0 - 20){
+    fill(100);
+    if(colY[0] < 0 - 20){
       colY[0] = height + 20;
     }
     colY[0] = colY[0] - 10;
-    rect(0, colY[0], width, 20);
+    
+    pushMatrix();
+      translate(0, colY[0]);
+      beginShape(QUADS);
+        vertex(0,  20);
+        vertex( width,  20);
+        vertex( width, 0);
+        vertex(0, 0);
+      endShape();
+    popMatrix();
+    
   };
 }
 
 //====Scene3===========================================================
 class Scene3 {
+  int num = 8;
+  float[] pX = new float[num];
+  float[] pY = new float[num];
+
   void init() {
-    fill(baseColor[0],baseColor[1],baseColor[2]);
+    fill(100);
     noStroke();
   };
   void run() {
     background(0);
-    fill((baseColor[0]+ random(0.15)) % 1,baseColor[1],baseColor[2]);
-    rect(frameCount * 4 % (width + 20 )- 10, 0, 20, height);
+    fill(100);
+
+    for(int i = 0; i < num; i ++){
+      pX[i] = noise(frameCount/30. + i * 1.321,i * 923)*width * 1.4 - width *0.15;
+      pY[i] = noise(frameCount/30. + i * 3.123,i*12345) *height * 1.4- height *0.15;
+    }
+
+    beginShape();
+    for(int i = 0; i < num; i ++){
+      vertex(pX[i], pY[i]);
+    }
+    endShape();
+
+        beginShape();
+    for(int i = 0; i < num; i ++){
+      vertex(width -pX[i], pY[i]);
+    }
+    endShape();
+
   };
 }
 
 //====Scene4===========================================================
 class Scene4 {
   void init() {
-    fill(0,0,0,0);
-    stroke(baseColor[0],baseColor[1],baseColor[2]);
-    strokeWeight(6);
-
   };
   int frame = 0;
   void run() {
-    frame = frameCount * 6;
     background(0);
-    
-    stroke((baseColor[0]+ random(0.1)) % 1,baseColor[1],baseColor[2] -0.5);
-    strokeWeight(20);
-    ellipse(width/2,  3 * height/4, frame % (width * 2), frame % (width * 2));
-    ellipse(width/2,  3 * height/4, (frame + width) % (width * 2), (frame + width) % (width * 2));
-    
-    
-    stroke((baseColor[0]+ random(0.1)) % 1,baseColor[1],baseColor[2]);
-    strokeWeight(6);
-    ellipse(width/2,  3 * height/4, frame % (width * 2), frame % (width * 2));
-    ellipse(width/2,  3 * height/4, (frame + width) % (width * 2), (frame + width) % (width * 2));
+    noStroke();
+    fill(100);
+
+    float pW = random(400);    
+    float pH = random(400);    
+    float pX = random(width);    
+    float pY = random(height);
+
+    pushMatrix();
+      translate(pX, pY);
+      beginShape(QUADS);
+        vertex(-pW/2,  -pH/2);
+        vertex( pW/2, -pH/2);
+        vertex( pW/2, pH/2);
+        vertex(-pW/2, pH/2);
+      endShape();
+    popMatrix();
+     pushMatrix();
+      translate(pX, pY);
+      beginShape(QUADS);
+        vertex(-pW/2,  -pH/2);
+        vertex( pW/2, -pH/2);
+        vertex( pW/2, pH/2);
+        vertex(-pW/2, pH/2);
+      endShape();
+    popMatrix();
 
   };
 }
@@ -91,54 +141,50 @@ class Scene4 {
 //====Scene5===========================================================
 class Scene5 {
   void init() {
-    fill(0,0,0,0);
-    stroke(baseColor[0],baseColor[1],baseColor[2]);
-    strokeWeight(3);
-    for(int i = 0; i < ringNum; i ++ ){
-      ringHue[i] = (baseColor[0]+ random(0.5)) % 1;
-    }
   };
-  int frame = 0;
 
-  int ringNum = 10;
-  int[] ringX = new int[ringNum];
-  int[] ringY = new int[ringNum];
-  int[] ringL = new int[ringNum];
-  int[] ringLE = new int[ringNum];
-  
-  float[] ringHue = new float[ringNum];
-  
-
+  int num = 10;
   void run() {
-    frame = frameCount * 8;
     background(0);
-    for(int i = 0; i < ringNum; i ++){
-      stroke(ringHue[i],baseColor[1],baseColor[2]);
-      strokeWeight(ringL[i]/30);
-      ellipse(ringX[i], ringY[i], ringLE[i] - ringL[i], ringLE[i] - ringL[i]);
+    noStroke();
+    fill(100);
 
-      ringL[i] -= 2;
+    // float pW = random(400);    
+    // float pH = random(400);    
+    float pX = random(width);    
+    float pY = random(height);
 
-      if(ringL[i]<=0){
-        ringL[i] = int(random(200));
-        ringLE[i] = ringL[i];
-        ringX[i] = int(random(width));
-        ringY[i] = int(random(height));
-        ringHue[i] = (baseColor[0]+ random(0.15)) % 1;
+
+    for(int i =0; i < num ; i++){
+      for(int j =0; j < height/(width / num) +1 ; j++){
+        float pW = random(60);
+        float pH = random(20);
+        fill((int)random(2) *100);
+        pushMatrix();
+          translate( i * width / num , j * width / num);
+
+          translate(noise(frameCount/100.123,i*100 + j*3000)*100,noise(frameCount/78.63,i*200 + j*6000)*100);
+
+          rotate((int)random(2) *PI/2);
+
+          fill(0, (int)random(2) *  60,100);
+          
+
+          beginShape(QUADS);
+            vertex(-pW, -pH);
+            vertex( pW, -pH);
+            vertex( pW, pH);
+            vertex(-pW, pH);
+          endShape();
+        popMatrix();
       }
-    };
-
-
-
-
-    
+    }
   };
 };
 
 
 //====Scene6===========================================================
 class Scene6 {
-  
   int num = 8;
   float YS[] = new float[num];
   float colW = width/8;
@@ -146,12 +192,10 @@ class Scene6 {
   float colY[] = new float[num];
   float[] colHue = new float[num];
   
-  
   void init() {
     fill(1);
     for(int i = 0; i < num; i++){
-      YS[i] = random(6)+2;
-      colHue[i] = (baseColor[0]+ random(0.3)) % 1;
+      YS[i] = random(16)+8;
     };
   };
 
@@ -160,20 +204,27 @@ class Scene6 {
     
     for(int i = 0; i < num; i++){
       if(colY[i] < 0 - colH){
-        YS[i] = (random(2)+1);
-        colHue[i] = (baseColor[0]+ random(0.2)) % 1;
+        YS[i] = (random(16)+8);
       }
       if(colY[i] > height - colH){
-        YS[i] = -(random(2)+1);
-        colHue[i] = (baseColor[0]+ random(0.2)) % 1;
+        YS[i] = -(random(16)+8);
       }
       colY[i] = colY[i] + YS[i];
-        
-      fill(colHue[i],baseColor[1],baseColor[2]);
-      rect(colW * i, colY[i],colW,colH);
-      
+
+      if(random(1) < 0.1){
+        colY[i] = random(height);
+      }
+      fill(100);      
+      pushMatrix();
+      translate( width/num * i + (width/num/2), colY[i]);
+      beginShape(QUADS);
+        vertex(-70, -colH + random(80));
+        vertex( 70, -colH + random(80));
+        vertex( 70, colH + random(80));
+        vertex(-70, colH + random(80));
+      endShape();
+      popMatrix();
     };
-   
   };
 }
 
@@ -181,21 +232,20 @@ class Scene6 {
 //====Scene7===========================================================
 class Scene7 {
   void init() {
-    fill(baseColor[0],baseColor[1],baseColor[2]);
+    fill(100);
   };
   void run() {
+    fill(100);
+
     
     translate(width/2, height/2);
-    translate(0, height/2);
+    // translate(0, height/2);
     
     rotate(radians(frameCount *4));
-    fill(baseColor[0] ,baseColor[1],baseColor[2]);
     rect(-width,-3,2*width,6);
     rotate(radians(60));
-    fill(baseColor[0]+0.1 ,baseColor[1],baseColor[2]);
     rect(-width,-3,2*width,6);
     rotate(radians(60));
-    fill(baseColor[0]+0.2 ,baseColor[1],baseColor[2]);
     rect(-width,-3,2*width,6);
     
   };
@@ -205,7 +255,7 @@ class Scene7 {
 //====Scene8===========================================================
 class Scene8 {
   void init() {
-    fill(baseColor[0],baseColor[1],baseColor[2]);
+    fill(100);
     noStroke();
   };
   
@@ -227,7 +277,7 @@ class Scene8 {
 //====Scene9===========================================================
 class Scene9 {
   void init() {
-    fill(baseColor[0],baseColor[1],baseColor[2]);
+    fill(100);
     noStroke();
   };
   
@@ -289,7 +339,7 @@ class Scene11 {
   float[] colY = new float[num];
   void init() {
     noStroke();
-    fill(baseColor[0],baseColor[1],baseColor[2]);
+    fill(100);
   };
   void run() {
      if(colY[0] < 0 - 20){

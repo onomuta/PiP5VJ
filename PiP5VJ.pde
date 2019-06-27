@@ -19,13 +19,14 @@ int scene;
 
 int btnCount = 0;
 
-float colorR = 0;
-float colorG = 0;
-float colorB = 0;
+float colorR = 1;
+float colorG = 1;
+float colorB = 1;
 
 void setup() {
-  colorMode(HSB, 1);
-  size(320, 180,P3D);
+  colorMode(HSB, 100);
+  // size(320, 180,P3D);
+  size(1280, 720,P3D);
   frameRate(60);
 
   scene1 = new Scene1();
